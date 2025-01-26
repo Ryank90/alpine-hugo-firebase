@@ -1,7 +1,7 @@
-FROM mhart/alpine-node:latest
+FROM node:current-alpine3.20
 LABEL maintainer="Ryan Kerry <rkerry1@gmail.com>"
 
-ENV HUGO_VERSION 0.109.0
+ENV HUGO_VERSION 0.142.0
 ENV HUGO_EXTENDED_BINARY hugo_extended_${HUGO_VERSION}_Linux-64bit
 
 RUN npm install -g firebase-tools
