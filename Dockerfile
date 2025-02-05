@@ -1,4 +1,4 @@
-FROM --platform=linux/amd64 bitnami/minideb AS build
+FROM --platform=${BUILDPLATFORM} bitnami/minideb AS build
 
 ENV HUGO_VERSION=0.143.1
 ENV HUGO_EXTENDED_BINARY=hugo_${HUGO_VERSION}_Linux-64bit
@@ -10,7 +10,7 @@ RUN tar xvzf /tmp/hugo.tar.gz -C /tmp/ && \
 
 # ---
 
-FROM --platform=linux/amd64 node:lts-slim
+FROM --platform=${BUILDPLATFORM} node:lts-slim
 LABEL maintainer="Ryan Kerry <rkerry1@gmail.com>"
 
 COPY --from=build /usr/bin/hugo /usr/bin/hugo
