@@ -1,1 +1,32 @@
-name: "Version Update"
+name: "Check Version Update"
+
+on:
+    workflow_dispatch:
+    schedule:
+        - cron: '0 0 6 * * *'
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ssh-key: ${{ secrets.DEPLOY_KEY }}
+
+      - name: Setup ssh agent
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.DEPLOY_KEY }}
+
+      - name: Check for an update
+        run: |
+          git config --global user.email "rkerry1@gmail.com"
+          git config --global user.name "ryank90"
+          DOCKER_TAG=$(grep 'ENV' Dockerfile | cut -d ' ' -f 3)
+          LATEST_TAG=$(curl -m 10 --retry 5 --silent "https://api.github.com/repos/gohugoio/hugo/releases" | jq -r '.[0].tag_name' | cut -d 'v' -f 2)
+          if [ "$DOCKER_TAG" = "$LATEST_TAG" ]; then echo "latest tag is same => $DOCKER_TAG" && exit 0; fi
+          sed -i "s|$DOCKER_TAG|$LATEST_TAG|g" Dockerfile
+          git add Dockerfile && git commit -m "Update hugo to v$LATEST_TAG"
+          git tag -a "$LATEST_TAG" -m "$LATEST_TAG"
+          git push && git push --tags
