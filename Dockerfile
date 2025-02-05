@@ -10,7 +10,7 @@ RUN tar xvzf /tmp/hugo.tar.gz -C /tmp/ && \
 
 # ---
 
-FROM --platform=${BUILDPLATFORM} node:lts-slim
+FROM --platform=${BUILDPLATFORM} node:current-slim
 LABEL maintainer="Ryan Kerry <rkerry1@gmail.com>"
 
 COPY --from=build /usr/bin/hugo /usr/bin/hugo
