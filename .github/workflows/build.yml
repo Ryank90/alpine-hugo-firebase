@@ -1,11 +1,6 @@
 name: Build Docker Image
 
-on:
-    push:
-        tags: ['*.*.*']
-        paths: ['Dockerfile']
-        branches: [main]
-
+on: [push]
 jobs:
     docker:
         runs-on: ubuntu-latest
