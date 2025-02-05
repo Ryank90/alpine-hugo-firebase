@@ -4,7 +4,7 @@ on:
     push:
         tags: ['*.*.*']
         paths: ['Dockerfile']
-        branches: [master]
+        branches: [main]
 
 jobs:
     docker:
