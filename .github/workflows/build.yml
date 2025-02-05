@@ -30,7 +30,7 @@ jobs:
                 pull: true
                 push: true
                 tags: |
-                    ryank90/alpine-hugo-firebase:${{ github.ref_name }}
+                    rk90/alpine-hugo-firebase:${{ github.ref_name }}
                 platforms: |
                     linux/amd64
 
@@ -42,6 +42,6 @@ jobs:
                 pull: true
                 push: true
                 tags: |
-                    ryank90/alpine-hugo-firebase:latest
+                    rk90/alpine-hugo-firebase:latest
                 platforms: |
                     linux/amd64
