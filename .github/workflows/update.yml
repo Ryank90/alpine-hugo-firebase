@@ -23,10 +23,14 @@ jobs:
         run: |
           git config --global user.email "rkerry1@gmail.com"
           git config --global user.name "ryank90"
-          DOCKER_TAG=$(grep 'ENV' Dockerfile | cut -d ' ' -f 3)
+          DOCKER_TAG=$(grep 'ENV HUGO_VERSION=' Dockerfile | cut -d '=' -f 2)
           LATEST_TAG=$(curl -m 10 --retry 5 --silent "https://api.github.com/repos/gohugoio/hugo/releases" | jq -r '.[0].tag_name' | cut -d 'v' -f 2)
-          if [ "$DOCKER_TAG" = "$LATEST_TAG" ]; then echo "latest tag is same => $DOCKER_TAG" && exit 0; fi
-          sed -i "s|$DOCKER_TAG|$LATEST_TAG|g" Dockerfile
+          if [ "$DOCKER_TAG" = "$LATEST_TAG" ]; then 
+            echo "Latest tag is same => $DOCKER_TAG" 
+            exit 0
+          fi
+          sed -i.bak "s/ENV HUGO_VERSION=$DOCKER_TAG/ENV HUGO_VERSION=$LATEST_TAG/" Dockerfile
+          rm Dockerfile.bak
           git add Dockerfile && git commit -m "Update hugo to v$LATEST_TAG"
-          git tag -a "$LATEST_TAG" -m "$LATEST_TAG"
+          git tag -a "v$LATEST_TAG" -m "v$LATEST_TAG"
           git push && git push --tags
