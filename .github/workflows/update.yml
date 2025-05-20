@@ -34,3 +34,17 @@ jobs:
           git add Dockerfile && git commit -m "Update hugo to v$LATEST_TAG"
           git tag -a "v$LATEST_TAG" -m "v$LATEST_TAG"
           git push && git push --tags
+          echo "NEW_TAG=v$LATEST_TAG" >> $GITHUB_ENV
+
+      - name: Create Release
+        if: env.NEW_TAG != ''
+        uses: softprops/action-gh-release@v1
+        with:
+          name: v${{ env.NEW_TAG }}
+          tag_name: v${{ env.NEW_TAG }}
+          body: |
+            Hugo Release v${{ env.NEW_TAG }}
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
