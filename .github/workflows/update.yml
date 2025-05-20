@@ -36,8 +36,23 @@ jobs:
           git push && git push --tags
           echo "NEW_TAG=v$LATEST_TAG" >> $GITHUB_ENV
 
-      - name: Create Release
+      - name: Check if release exists
         if: env.NEW_TAG != ''
+        id: check_release
+        run: |
+          RELEASE_EXISTS=$(curl -s -o /dev/null -w "%{http_code}" \
+            -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            "https://api.github.com/repos/${{ github.repository }}/releases/tags/v${{ env.NEW_TAG }}")
+          if [ "$RELEASE_EXISTS" = "200" ]; then
+            echo "Release already exists for v${{ env.NEW_TAG }}"
+            echo "RELEASE_EXISTS=true" >> $GITHUB_ENV
+          else
+            echo "No existing release found for v${{ env.NEW_TAG }}"
+            echo "RELEASE_EXISTS=false" >> $GITHUB_ENV
+          fi
+
+      - name: Create Release
+        if: env.NEW_TAG != '' && env.RELEASE_EXISTS == 'false'
         uses: softprops/action-gh-release@v1
         with:
           name: v${{ env.NEW_TAG }}
