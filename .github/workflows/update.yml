@@ -55,10 +55,10 @@ jobs:
         if: env.NEW_TAG != '' && env.RELEASE_EXISTS == 'false'
         uses: softprops/action-gh-release@v1
         with:
-          name: v${{ env.NEW_TAG }}
-          tag_name: v${{ env.NEW_TAG }}
+          name: ${{ env.NEW_TAG }}
+          tag_name: ${{ env.NEW_TAG }}
           body: |
-            Hugo Release v${{ env.NEW_TAG }}
+            Hugo Release ${{ env.NEW_TAG }}
           draft: false
           prerelease: false
         env:
