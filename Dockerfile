@@ -1,6 +1,6 @@
 FROM --platform=${BUILDPLATFORM} bitnami/minideb AS build
 
-ENV HUGO_VERSION=0.150.1
+ENV HUGO_VERSION=
 ENV HUGO_EXTENDED_BINARY=hugo_extended_${HUGO_VERSION}_Linux-64bit
 
 ADD https://github.com/gohugoio/hugo/releases/download/v${HUGO_VERSION}/${HUGO_EXTENDED_BINARY}.tar.gz /tmp/hugo.tar.gz
